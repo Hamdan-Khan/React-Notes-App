@@ -68,7 +68,7 @@ export const AppProvider = ({ children }) => {
   // Edit notes
   const editNote = async (id, title, description, tag) => {
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
@@ -77,20 +77,22 @@ export const AppProvider = ({ children }) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    return response.json();
-    for (let i = 0; i < notes.length; i++) {
-      const element = notes[i];
-      if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+    // return response.json();
+    const notesCopy = JSON.parse(JSON.stringify(notes));
+    for (let i = 0; i < notesCopy.length; i++) {
+      if (notesCopy[i]._id === id) {
+        notesCopy[i].title = title;
+        notesCopy[i].description = description;
+        notesCopy[i].tag = tag;
+        break;
+        // console.log(notes[i]);
       }
     }
+    setNotes(notesCopy);
   };
 
   const [cnote, setcNote] = useState({ title: "", description: "", tag: "" });
   const updateHandler = (currentNote) => {
-    // console.log(currentNote);
     setcNote(currentNote);
   };
 

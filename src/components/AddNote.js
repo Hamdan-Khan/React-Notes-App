@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { useGlobalContext } from "../context/Context";
 
 const AddNote = () => {
-  const { addNote, cnote, setcNote, setNotes, notes, editNote } =
-    useGlobalContext();
-  const [note, setNote] = useState({ title: "", description: "", tag: "" });
+  const { addNote, cnote, setcNote, editNote } = useGlobalContext();
+  const [note, setNote] = useState({
+    id: "",
+    title: "",
+    description: "",
+    tag: "",
+  });
   const changeHandler = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
@@ -15,9 +19,9 @@ const AddNote = () => {
     e.preventDefault();
     addNote(note.title, note.description, note.tag);
   };
-  const editHandler = (e) => {
-    // setNotes({ ...notes, [e.target.name]: e.target.value });
+  const editHandler = () => {
     // console.log("Updated", cnote);
+    editNote(cnote._id, cnote.title, cnote.description, cnote.tag);
   };
 
   return (
