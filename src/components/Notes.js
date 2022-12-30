@@ -9,6 +9,7 @@ const Notes = () => {
   }, []);
   return (
     <div className="row">
+      <h5 className="m-3">{notes.length === 0 && "No notes to show"}</h5>
       {notes.map((x) => {
         const { title, description, _id } = x;
         return (

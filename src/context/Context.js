@@ -35,15 +35,7 @@ export const AppProvider = ({ children }) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const note = {
-      _id: "63a9494sb26c455b683838fd1",
-      user: "63a72631869a44affee675fe",
-      title: title,
-      description: description,
-      tag: tag,
-      date: "2022-12-26T07:12:11.045Z",
-      __v: 0,
-    };
+    const note = await response.json();
     setNotes(notes.concat(note));
   };
 
