@@ -1,10 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../context/Context";
 
 const Login = () => {
+  const { showAlert } = useGlobalContext();
   let navigate = useNavigate();
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
   const submitHandler = async (e) => {
     e.preventDefault();
     const response = await fetch(`http://localhost:5000/api/auth/login`, {
@@ -23,8 +28,9 @@ const Login = () => {
       // store token locally
       localStorage.setItem("token", json.authData);
       navigate("/");
+      showAlert("Logged in successfully", "success");
     } else {
-      alert("Wrong credentials");
+      showAlert("Please enter valid credentials", "danger");
     }
   };
   const changeHandler = (e) => {

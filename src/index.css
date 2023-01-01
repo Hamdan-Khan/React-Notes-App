@@ -1,3 +1,6 @@
 i {
   cursor: pointer;
 }
+.alert {
+  height: 50px;
+}

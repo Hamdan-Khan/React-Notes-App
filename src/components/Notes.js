@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import { useGlobalContext } from "../context/Context";
 
 const Notes = () => {
   const { notes, deleteNote, getNote, updateHandler } = useGlobalContext();
+  let navigate = useNavigate();
   useEffect(() => {
-    getNote();
+    if (localStorage.getItem("token")) {
+      getNote();
+    } else {
+      navigate("/login");
+    }
   }, []);
   return (
     <div className="row">

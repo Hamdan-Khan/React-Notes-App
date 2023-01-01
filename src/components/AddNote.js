@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useGlobalContext } from "../context/Context";
 
 const AddNote = () => {
-  const { addNote, cnote, setcNote, editNote } = useGlobalContext();
+  const { addNote, cnote, setcNote, editNote, showAlert } = useGlobalContext();
   const [note, setNote] = useState({
     id: "",
     title: "",
@@ -19,10 +19,12 @@ const AddNote = () => {
     e.preventDefault();
     addNote(note.title, note.description, note.tag);
     setNote({ id: "", title: "", description: "", tag: "" });
+    showAlert("New Note Added", "success");
   };
   const editHandler = () => {
     // console.log("Updated", cnote);
     editNote(cnote._id, cnote.title, cnote.description, cnote.tag);
+    showAlert("Note Edited successfully", "success");
   };
 
   return (

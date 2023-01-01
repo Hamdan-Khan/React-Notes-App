@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../context/Context";
 
 const Signup = () => {
+  const { showAlert } = useGlobalContext();
   let navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     name: "",
@@ -12,7 +14,7 @@ const Signup = () => {
   });
   const submitHandler = async (e) => {
     e.preventDefault();
-    const { name, email, password, cpassword } = credentials;
+    const { name, email, password } = credentials;
     const response = await fetch(`http://localhost:5000/api/auth/createusers`, {
       method: "POST",
       headers: {
@@ -26,8 +28,9 @@ const Signup = () => {
       // store token locally
       localStorage.setItem("token", json.authData);
       navigate("/");
+      showAlert("Account created successfully", "success");
     } else {
-      alert("Wrong credentials");
+      showAlert("Please enter all the fields correctly", "danger");
     }
   };
   const changeHandler = (e) => {
@@ -35,6 +38,7 @@ const Signup = () => {
   };
   return (
     <form className="container">
+      <h1>Sign Up</h1>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name
@@ -46,6 +50,7 @@ const Signup = () => {
           name="name"
           aria-describedby="emailHelp"
           onChange={changeHandler}
+          required
         />
       </div>
       <div className="mb-3">
@@ -59,6 +64,7 @@ const Signup = () => {
           name="email"
           aria-describedby="emailHelp"
           onChange={changeHandler}
+          required
         />
       </div>
       <div className="mb-3">
@@ -71,6 +77,7 @@ const Signup = () => {
           id="password"
           name="password"
           onChange={changeHandler}
+          required
         />
       </div>
       <div className="mb-3">
@@ -83,6 +90,7 @@ const Signup = () => {
           id="cpassword"
           name="cpassword"
           onChange={changeHandler}
+          required
         />
       </div>
 

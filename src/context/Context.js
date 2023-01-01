@@ -4,18 +4,18 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const host = "http://localhost:5000";
-  const initialNotes = [];
 
+  // Notes global array
+  const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
 
-  // Add Notes
+  // Fetch all Notes
   const getNote = async () => {
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNhNzI2MzE4NjlhNDRhZmZlZTY3NWZlIn0sImlhdCI6MTY3MTk2MDU2M30.VYhGWZK3IGMP04jQkMpPYFxPbNj-TrjhWA9PGFixagk",
+        "auth-token": localStorage.getItem("token"),
       },
     });
     const json = await response.json();
@@ -30,8 +30,7 @@ export const AppProvider = ({ children }) => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNhNzI2MzE4NjlhNDRhZmZlZTY3NWZlIn0sImlhdCI6MTY3MTk2MDU2M30.VYhGWZK3IGMP04jQkMpPYFxPbNj-TrjhWA9PGFixagk",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -46,8 +45,7 @@ export const AppProvider = ({ children }) => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNhNzI2MzE4NjlhNDRhZmZlZTY3NWZlIn0sImlhdCI6MTY3MTk2MDU2M30.VYhGWZK3IGMP04jQkMpPYFxPbNj-TrjhWA9PGFixagk",
+        "auth-token": localStorage.getItem("token"),
       },
     });
     console.log("Deleted note with id:", id);
@@ -64,8 +62,7 @@ export const AppProvider = ({ children }) => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNhNzI2MzE4NjlhNDRhZmZlZTY3NWZlIn0sImlhdCI6MTY3MTk2MDU2M30.VYhGWZK3IGMP04jQkMpPYFxPbNj-TrjhWA9PGFixagk",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -83,9 +80,20 @@ export const AppProvider = ({ children }) => {
     setNotes(notesCopy);
   };
 
+  // Current Notes
   const [cnote, setcNote] = useState({ title: "", description: "", tag: "" });
   const updateHandler = (currentNote) => {
     setcNote(currentNote);
+  };
+
+  // Alert context
+  const [alert, setAlert] = useState();
+  const showAlert = (message, type) => {
+    setAlert({ message, type });
+    const a = setTimeout(() => {
+      setAlert(null);
+      clearInterval(a);
+    }, 2000);
   };
 
   return (
@@ -100,6 +108,8 @@ export const AppProvider = ({ children }) => {
         setcNote,
         setNotes,
         editNote,
+        alert,
+        showAlert,
       }}
     >
       {children}
